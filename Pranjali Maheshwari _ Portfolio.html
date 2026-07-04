@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>APPy </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #fcf4e9;
+    --cream-soft: #f7ecdd;
+    --maroon: #7f1b26;
+    --maroon-deep: #5c1219;
+    --ink: #2b2725;
+    --ink-soft: #6b615c;
+    --gold: #c99b4a;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1,h2,h3, .display{
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+
+  a{ text-decoration:none; color:inherit; }
+
+  /* ---------- NAV ---------- */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 28px clamp(24px, 6vw, 72px);
+    position: sticky;
+    top:0;
+    z-index: 50;
+    background: rgba(252,244,233,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(43,39,37,0.08);
+  }
+
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--maroon);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .logo svg{ width:26px; height:26px; }
+
+  nav ul{
+    list-style:none;
+    display:flex;
+    gap: clamp(20px, 3vw, 40px);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  nav a{
+    position:relative;
+    padding-bottom:4px;
+    transition: color .25s ease;
+  }
+  nav a::after{
+    content:"";
+    position:absolute;
+    left:0; bottom:0;
+    width:0%; height:1.5px;
+    background: var(--maroon);
+    transition: width .3s ease;
+  }
+  nav a:hover{ color: var(--maroon); }
+  nav a:hover::after{ width:100%; }
+
+  .nav-cta{
+    background: var(--maroon);
+    color: var(--cream);
+    padding: 12px 26px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform .25s ease, background .25s ease;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{ background: var(--maroon-deep); transform: translateY(-2px); }
+
+  .nav-links-wrap{ display:flex; align-items:center; gap: clamp(20px,3vw,48px); }
+
+  .burger{ display:none; background:none; border:none; cursor:pointer; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    display:grid;
+    grid-template-columns: 1.1fr 1fr;
+    align-items:center;
+    gap: 40px;
+    padding: clamp(40px,6vw,90px) clamp(24px,6vw,72px) clamp(60px,8vw,110px);
+    position:relative;
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-size:0.8rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color: var(--maroon);
+    font-weight:700;
+    margin-bottom: 22px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:28px; height:1px;
+    background: var(--maroon);
+  }
+
+  .hero h1{
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    color: var(--ink);
+  }
+  .hero h1 em{
+    font-style: italic;
+    color: var(--maroon);
+  }
+
+  .hero p.lead{
+    margin-top: 22px;
+    max-width: 460px;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions{
+    margin-top: 36px;
+    display:flex;
+    align-items:center;
+    gap: 26px;
+    flex-wrap:wrap;
+  }
+
+  .btn-primary{
+    background: var(--maroon);
+    color: var(--cream);
+    padding: 16px 34px;
+    border-radius: 999px;
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    box-shadow: 0 10px 24px -12px rgba(127,27,38,0.6);
+  }
+  .btn-primary:hover{ transform: translateY(-3px); background:var(--maroon-deep); }
+
+  .btn-ghost{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-weight:600;
+    color: var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 3px;
+  }
+  .btn-ghost .play{
+    width:34px;height:34px;
+    border-radius:50%;
+    border:1.5px solid var(--ink);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    transition: background .25s ease, color .25s ease, transform .25s ease;
+  }
+  .btn-ghost:hover .play{ background: var(--ink); color: var(--cream); transform: scale(1.08); }
+
+  /* hero visual */
+  .hero-visual{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .hero-photo{
+    width: min(430px, 90%);
+    aspect-ratio: 1/1.05;
+    border-radius: 50% 50% 46% 46% / 55% 55% 45% 45%;
+    background:
+      radial-gradient(circle at 35% 30%, #e8b370, #c9843f 45%, #8a4d1f 100%);
+    box-shadow: 0 40px 60px -20px rgba(43,39,37,0.35);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-photo::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(0,0,0,0.12), transparent 40%),
+      radial-gradient(circle at 70% 20%, rgba(255,255,255,0.25), transparent 35%);
+  }
+  .hero-photo::after{
+    content:"🥐";
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 9rem;
+    filter: drop-shadow(0 20px 20px rgba(0,0,0,0.25));
+  }
+
+  /* signature: rotating badge */
+  .badge{
+    position:absolute;
+    bottom: -6%;
+    left: -8%;
+    width: 150px;
+    height:150px;
+    background: var(--cream);
+    border-radius:50%;
+    box-shadow: 0 20px 40px -14px rgba(43,39,37,0.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .badge-spin{
+    position:absolute;
+    inset:0;
+    animation: spin 16s linear infinite;
+  }
+  .badge-spin text{
+    font-size: 9.3px;
+    letter-spacing: 3px;
+    fill: var(--maroon);
+    text-transform:uppercase;
+    font-family:'Manrope',sans-serif;
+    font-weight:700;
+  }
+  .badge-center{
+    position:relative;
+    z-index:2;
+    width:56px; height:56px;
+    background: var(--maroon);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.5rem;
+  }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+
+  .float-chip{
+    position:absolute;
+    top: 8%;
+    right: -4%;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 14px 20px;
+    border-radius: 16px;
+    font-size:0.85rem;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    animation: floatY 4.5s ease-in-out infinite;
+    box-shadow: 0 20px 30px -14px rgba(0,0,0,0.4);
+  }
+  .float-chip .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:#8bd17c;
+  }
+  @keyframes floatY{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-12px); }
+  }
+
+  /* ---------- MARQUEE STRIP ---------- */
+  .strip{
+    background: var(--maroon);
+    color: var(--cream);
+    overflow:hidden;
+    padding: 16px 0;
+  }
+  .strip-track{
+    display:flex;
+    gap: 60px;
+    white-space:nowrap;
+    width:max-content;
+    animation: marquee 24s linear infinite;
+    font-family:'Fraunces',serif;
+    font-size:1.2rem;
+    font-style:italic;
+  }
+  .strip-track span{ display:flex; align-items:center; gap:60px; }
+  .strip-track span::after{ content:"✦"; font-style:normal; opacity:.6; }
+  @keyframes marquee{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+
+  /* ---------- MENU / PRODUCTS ---------- */
+  .section{ padding: clamp(70px,9vw,120px) clamp(24px,6vw,72px); }
+
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap: 24px;
+    margin-bottom: 50px;
+    flex-wrap:wrap;
+  }
+  .section-head h2{ font-size: clamp(2rem, 3.4vw, 2.8rem); }
+  .section-head p{ color: var(--ink-soft); max-width: 360px; }
+
+  .cards{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+    gap: 28px;
+  }
+
+  .card{
+    background: var(--cream-soft);
+    border-radius: 20px;
+    padding: 30px;
+    transition: transform .35s ease, box-shadow .35s ease;
+    cursor:pointer;
+    border: 1px solid rgba(43,39,37,0.06);
+  }
+  .card:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 24px 40px -20px rgba(43,39,37,0.25);
+  }
+  .card .icon{
+    font-size: 2.4rem;
+    margin-bottom: 20px;
+    display:inline-block;
+    transition: transform .35s ease;
+  }
+  .card:hover .icon{ transform: rotate(-8deg) scale(1.1); }
+  .card h3{ font-size:1.3rem; margin-bottom:10px; }
+  .card p{ color: var(--ink-soft); font-size:0.95rem; line-height:1.6; margin-bottom: 18px;}
+  .card .price{ font-weight:700; color: var(--maroon); font-family:'Fraunces',serif; font-size:1.15rem; }
+
+  /* ---------- FOOTER CTA ---------- */
+  .cta-band{
+    margin: 0 clamp(24px,6vw,72px) clamp(60px,8vw,100px);
+    background: var(--maroon);
+    color: var(--cream);
+    border-radius: 32px;
+    padding: clamp(50px,7vw,80px);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap: 30px;
+    flex-wrap:wrap;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-band h2{ font-size: clamp(2rem,3.6vw,3rem); max-width:520px; }
+  .cta-band .btn-primary{
+    background: var(--cream);
+    color: var(--maroon);
+    box-shadow:none;
+  }
+  .cta-band .btn-primary:hover{ background:#fff; }
+
+  footer{
+    text-align:center;
+    padding: 30px;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 860px){
+    .hero{ grid-template-columns: 1fr; }
+    .hero-visual{ order:-1; }
+    nav ul{ display:none; }
+    .nav-cta{ display:none; }
+    .burger{ display:block; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 14c0-4 3-7 8-7s8 3 8 7-3 5-8 5-8-1-8-5Z" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M8 9c0-2 1.8-4 4-4s4 2 4 4" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+    Appy Chaudhary
+  </div>
+  <div class="nav-links-wrap">
+    <nav>
+      <ul>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#visit">Visit</a></li>
+      </ul>
+    </nav>
+    <a href="#order" class="nav-cta">Order Ahead</a>
+  </div>
+  <button class="burger" aria-label="menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="#2b2725" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+</header>
+
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">Est. 2014 · Small-batch bakery</span>
+    <h1>Warm bread, <em>slow</em><br>mornings.</h1>
+    <p class="lead">Every loaf is proofed overnight and baked before sunrise. No shortcuts, no fillers — just flour, water, salt, and time.</p>
+    <div class="hero-actions">
+      <a href="#order" class="btn-primary">
+        Order for Pickup
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#story" class="btn-ghost">
+        <span class="play">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 2l7 4-7 4V2Z" fill="currentColor"/></svg>
+        </span>
+        Our Story
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="float-chip"><span class="dot"></span>Fresh batch out at 7:00am</div>
+    <div class="hero-photo"></div>
+    <div class="badge">
+      <svg class="badge-spin" viewBox="0 0 150 150">
+        <defs>
+          <path id="circlePath" d="M 75,75 m -55,0 a 55,55 0 1,1 110,0 a 55,55 0 1,1 -110,0" />
+        </defs>
+        <text>
+          <textPath href="#circlePath" startOffset="0%">Baked Fresh Daily • Baked Fresh Daily •</textPath>
+        </text>
+      </svg>
+      <div class="badge-center">🌾</div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="strip-track">
+    <span>Sourdough</span><span>Croissants</span><span>Baguettes</span><span>Cinnamon Rolls</span><span>Rye</span>
+    <span>Sourdough</span><span>Croissants</span><span>Baguettes</span><span>Cinnamon Rolls</span><span>Rye</span>
+  </div>
+</div>
+
+<section class="section" id="menu">
+  <div class="section-head">
+    <div>
+      <h2>Today's selection</h2>
+    </div>
+    <p>Rotating daily depending on what the oven — and the season — gives us.</p>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <span class="icon">🥖</span>
+      <h3>Classic Baguette</h3>
+      <p>Crisp crust, open airy crumb, made with three flours.</p>
+      <span class="price">$5.50</span>
+    </div>
+    <div class="card">
+      <span class="icon">🥐</span>
+      <h3>Butter Croissant</h3>
+      <p>Laminated over three days with cultured French butter.</p>
+      <span class="price">$4.25</span>
+    </div>
+    <div class="card">
+      <span class="icon">🍞</span>
+      <h3>Country Sourdough</h3>
+      <p>48-hour ferment, naturally leavened, deep tang.</p>
+      <span class="price">$8.00</span>
+    </div>
+    <div class="card">
+      <span class="icon">🥨</span>
+      <h3>Sea Salt Pretzel</h3>
+      <p>Dark, glossy crust with flaky Maldon salt on top.</p>
+      <span class="price">$3.75</span>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band" id="order">
+  <h2>Skip the line. Order ahead for pickup this morning.</h2>
+  <a href="#" class="btn-primary">
+    Start an Order
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</div>
+
+<footer>© 2026 Maison Croûte Bakery. All bread, no filler.</footer>
+
+<script>
+  // subtle scroll reveal
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.style.opacity = 1;
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.card').forEach((card, i)=>{
+    card.style.opacity = 0;
+    card.style.transform = 'translateY(24px)';
+    card.style.transition = `opacity .6s ease ${i*0.08}s, transform .6s ease ${i*0.08}s`;
+    observer.observe(card);
+  });
+
+  // mobile burger toggle (simple demo behavior)
+  const burger = document.querySelector('.burger');
+  burger.addEventListener('click', ()=>{
+    alert('Menu links: Menu · Our Story · Visit · Order Ahead');
+  });
+</script>
+
+</body>
+</html>
